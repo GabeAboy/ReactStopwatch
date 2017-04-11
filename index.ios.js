@@ -26,24 +26,31 @@ var StopWatch = React.createClass({
     return(
       <View style = {styles.container}>
 
-      <View style = {[styles.header]}>
-        <View style = {[styles.timerWrapper]}>
-          <Text style = {styles.timer}>{formatTime(this.state.timeElapsed)}</Text>
+        <View style = {[styles.header]}>
+          <View style = {[styles.timerWrapper]}>
+            <Text style = {styles.timer}>{formatTime(this.state.timeElapsed)}</Text>
+          </View>
+          <View style = {[styles.buttonWrapper]}>
+            {this.startStopButton()}
+            {this.lapButton()}
+          </View>
         </View>
-        <View style = {[styles.buttonWrapper]}>
-          {this.startStopButton()}
-          {this.lapButton()}
+        <View style = {[styles.footer]}>
+          {this.laps()}
         </View>
-      </View>
-      <View style = {[styles.footer]}>
-        {this.laps()}
-      </View>
-
+        <View style ={styles.footersFotter}>
+          <TouchableHighlight underlayColor='orange' onPress = {this.handleReset} style = {styles.reset}>
+            <Text style={styles.buttonText}>Reset</Text>
+          </TouchableHighlight>
+        </View>
       </View>
 
 
     )
 
+  },
+  handleReset:function() {
+    this.state.laps=[]
   },
   startStopButton:function() {
     var style = this.state.running ? styles.stopButton : styles.startButton;
@@ -88,6 +95,7 @@ var StopWatch = React.createClass({
         timeElapsed:new Date() - this.state.startTime,
         running:true
       });
+      if(this.state.laps.length>=8)this.state.laps.shift()
     },30)
   }
 
@@ -98,11 +106,28 @@ var styles = StyleSheet.create({
     alignItems:'stretch'
   },
   header:{
-    flex:1
+    flex:4
 
   },
   footer:{
-    flex:1
+    flex:4
+  },
+  reset:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'red'
+  },
+  buttonText:{
+    fontSize:20,
+    color:'black',
+    letterSpacing:1,
+
+  },
+  footersFotter:{
+    flex:2,
+    flexDirection:'row',
+    backgroundColor:'blue'
   },
   timerWrapper:{
     flex:5,
