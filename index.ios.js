@@ -13,6 +13,7 @@ import {
   View
 } from 'react-native';
 var formatTime = require('minutes-seconds-milliseconds');
+var addit=0
 var StopWatch = React.createClass({
   getInitialState:function() {
     return{
@@ -51,6 +52,13 @@ var StopWatch = React.createClass({
   },
   handleReset:function() {
     this.state.laps=[]
+    this.state.timeElapsed=null
+    if(this.state.running){
+      clearInterval(this.interval);
+      this.setState({running:false});
+      return
+    }
+
   },
   startStopButton:function() {
     var style = this.state.running ? styles.stopButton : styles.startButton;
@@ -68,16 +76,18 @@ var StopWatch = React.createClass({
     )
   },
   laps:function() {
+
     return this.state.laps.map(function(time,index) {
       return(
       <View key = {index} style = {styles.lap}>
-        <Text style = {styles.lapText}>Lap #{index+ 1}</Text>
-        <Text style = {styles.lapText}>{formatTime(time)}</Text>
+        <Text style = {styles.lapText}>Lap #{time.index}</Text>
+        <Text style = {styles.lapText}>{formatTime(time.time)}</Text>
       </View>)
     })
   },
   handleLapPress:function() {
-    var lap = this.state.timeElapsed;
+    addit++
+    var lap = {time:this.state.timeElapsed,index:addit};
     this.setState({
       startTime:new Date(),
       laps:this.state.laps.concat([lap])
@@ -95,7 +105,7 @@ var StopWatch = React.createClass({
         timeElapsed:new Date() - this.state.startTime,
         running:true
       });
-      if(this.state.laps.length>=8)this.state.laps.shift()
+      if(this.state.laps.length>8)this.state.laps.shift()
     },30)
   }
 
@@ -119,7 +129,7 @@ var styles = StyleSheet.create({
     backgroundColor:'red'
   },
   buttonText:{
-    fontSize:20,
+    fontSize:50,
     color:'black',
     letterSpacing:1,
 
