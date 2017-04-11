@@ -63,8 +63,8 @@ var StopWatch = React.createClass({
   laps:function() {
     return this.state.laps.map(function(time,index) {
       return(
-      <View style = {styles.lap}>
-        <Text style = {styles.lapText}>Lap #{index + 1}</Text>
+      <View key = {index} style = {styles.lap}>
+        <Text style = {styles.lapText}>Lap #{index+ 1}</Text>
         <Text style = {styles.lapText}>{formatTime(time)}</Text>
       </View>)
     })
